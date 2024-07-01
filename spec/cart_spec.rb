@@ -11,23 +11,21 @@ RSpec.describe Cart do
     end
 
     context 'when products were added' do
-      let(:products_repo) do
-        double(:products_repo)
-      end
+      let(:products_repo) { instance_double(ProductRepo) }
       let(:subject) do
         described_class.new(products_repo: products_repo)
       end
 
       let(:product_a) do
-        double(
-          :product_a,
+        instance_double(
+          Product,
           code: 'PA',
           price: BigDecimal('6.03')
         )
       end
       let(:product_b) do
-        double(
-          :product_b,
+        instance_double(
+          Product,
           code: 'PB',
           price: BigDecimal('5.01')
         )
