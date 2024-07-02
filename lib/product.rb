@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
-# product
+# product dto
 class Product
-  attr_reader :code, :price
+  attr_reader :product_code, :name, :price
+
+  def initialize(product_code, name, price)
+    @product_code = product_code
+    @name = name
+    @price = price
+  end
 end

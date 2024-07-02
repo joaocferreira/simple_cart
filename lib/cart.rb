@@ -15,7 +15,7 @@ class Cart
 
   def add(product_code, quantity = 1)
     product = products_repo.find_by_code(product_code)
-    quantity.times { basket << { code: product.code, price: product.price } }
+    quantity.times { basket << { code: product.product_code, price: product.price } }
     self
   end
 
