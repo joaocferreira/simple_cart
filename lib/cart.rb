@@ -6,10 +6,12 @@ class Cart
 
   def initialize(
     currency: nil,
-    products_repo: nil
+    products_repo: nil,
+    discount_service: nil
   )
     @currency = currency || '€'
     @products_repo = products_repo
+    @discount_service = discount_service
     @basket = []
   end
 
@@ -20,7 +22,8 @@ class Cart
   end
 
   def total_price
-    "#{format('%.2f', subtotal)}#{currency}"
+    total = subtotal - discount
+    "#{format('%.2f', total)}#{currency}"
   end
 
   def products_repo
@@ -35,5 +38,27 @@ class Cart
 
   def subtotal
     basket.inject(0) { |acc, item| acc + item[:price] }
+  end
+
+  def discount
+    reduced_basket = basket.inject({}) do |acc, item|
+      acc.tap do |a|
+        a[item[:code]] ||= 0
+        a[item[:code]] += 1
+      end
+    end
+    reduced_basket.inject(0) do |sum, item|
+      sum + discount_service.discount_for(product_code: item[0], quantity: item[1])
+    end
+  end
+
+  def discount_service
+    @discount_service ||= DiscountService.new({
+                                                'GR1' => ->(n) { (n / 2) * BigDecimal('3.11') },
+                                                'SR1' => lambda { |n|
+                                                           n < 3 ? 0 : (BigDecimal('5.00') - BigDecimal('4.50')) * n
+                                                         },
+                                                'CF1' => ->(n) { n < 3 ? 0 : BigDecimal('11.23') * n * (1.to_f / 3) }
+                                              })
   end
 end

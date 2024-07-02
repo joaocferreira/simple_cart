@@ -19,11 +19,11 @@ RSpec.describe DiscountService do
   end
   subject do
     described_class.new({
-      product_a.product_code => lambda { |n| (n / 2) *  product_a.price},
-      product_b.product_code => lambda do |n|
-        n < 4 ? 0 : (product_b.price - BigDecimal('4.50')) * n
-      end
-    })
+                          product_a.product_code => ->(n) { (n / 2) * product_a.price },
+                          product_b.product_code => lambda do |n|
+                                                      n < 4 ? 0 : (product_b.price - BigDecimal('4.50')) * n
+                                                    end
+                        })
   end
 
   describe '#discount_for' do
@@ -40,11 +40,11 @@ RSpec.describe DiscountService do
         expect(subject.discount_for(product_code: 'PA', quantity: 3)).to eq(6.03)
         expect(subject.discount_for(product_code: 'PA', quantity: 4)).to eq(12.06)
 
-
-
         expect(subject.discount_for(product_code: 'PB', quantity: 4)).to eq(2.04)
         expect(subject.discount_for(product_code: 'PB', quantity: 5)).to eq(2.55)
       end
     end
   end
 end
+
+# rubocop:enable Metrics/BlockLength
