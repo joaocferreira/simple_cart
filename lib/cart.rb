@@ -51,7 +51,8 @@ class Cart
       sum + discount_service.discount_for(product_code: item[0], quantity: item[1])
     end
   end
-
+  
+  # rubocop:disable Metrics/AbcSize
   def discount_service
     @discount_service ||= DiscountService.new({
                                                 'GR1' => ->(n) { (n / 2) * BigDecimal('3.11') },
@@ -61,4 +62,5 @@ class Cart
                                                 'CF1' => ->(n) { n < 3 ? 0 : BigDecimal('11.23') * n * (1.to_f / 3) }
                                               })
   end
+  # rubocop:enable Metrics/AbcSize
 end
