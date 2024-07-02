@@ -2,7 +2,7 @@
 
 # cart
 class Cart
-  attr_reader :currency, :products_repo, :basket
+  attr_reader :currency, :basket
 
   def initialize(
     currency: nil,
@@ -21,6 +21,14 @@ class Cart
 
   def total_price
     "#{format('%.2f', subtotal)}#{currency}"
+  end
+
+  def products_repo
+    @products_repo ||= ProductRepo.new([
+                                         Product.new('GR1', 'Green Tea', 3.11),
+                                         Product.new('SR1', 'Strawberries', 5.00),
+                                         Product.new('CF1', 'Coffee', 11.23)
+                                       ])
   end
 
   private
