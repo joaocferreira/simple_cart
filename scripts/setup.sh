@@ -1,10 +1,8 @@
 #!/bin/bash
 
-gem update --system 3.2.3
+gem update
 
-gem install bundler -v 2.3.27
-
-bundle update --bundler
+gem install bundler
 
 bundle install
 
